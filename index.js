@@ -55,6 +55,7 @@ async function fetchData(url) {
                 tag.style.width = value.style.width;
                 tag.style.margin = "10px";
               });
+              tagContainer.appendChild(tag)
               console.log(data.message);
             }
           } catch (error) {
