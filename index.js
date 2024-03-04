@@ -56,8 +56,7 @@ async function fetchData(url) {
 
               tagContainer.appendChild(tag);
             } else {
-              console.log(action,"iiiiiiiiiiiiiiiiiiiiii");
-              alert(action.statusText);
+              alert(action.message);
             }
           } catch (error) {
             console.log(error);
