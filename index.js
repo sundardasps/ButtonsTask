@@ -16,7 +16,7 @@ async function fetchData(url) {
       const data = await response.json();
       const container = document.getElementById("buttons");
       const tagContainer = document.getElementById("tag");
-      const tag = document.createElement("button");
+      
 
       data.buttons.filter((value) => {
         const buttonElement = document.createElement("button");
@@ -44,6 +44,7 @@ async function fetchData(url) {
 
             if (action.status === 200) {
               const newTag = await action.json();
+              const tag = document.createElement("button");
               tag.textContent = newTag.newTag.tagName;
               tag.style.backgroundColor = newTag.newTag.style.color;
               tag.style.borderRadius = newTag.newTag.style.borderRadius;
@@ -69,6 +70,7 @@ async function fetchData(url) {
       });
 
       data.tags.filter((value) => {
+        const tag = document.createElement("button");
         tag.textContent = value.tagName;
         tag.style.backgroundColor = value.style.color;
         tag.style.borderRadius = value.style.borderRadius;
