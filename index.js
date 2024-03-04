@@ -1,8 +1,19 @@
-function clickButton(name) {
-  let div = document.getElementById("tag");
-  div.style.backgroundColor = div.style.backgroundColor === name ? null : name;
-  div.innerText = div.style.backgroundColor === name ? name : null;
-}
+// async function sumiButton() {
+//   const newUrl = new URL(url);
+//   const urlSegment = url.split("/");
+//   const apiKey = urlSegment[5];
+//   const api = "https://buttontask-server.onrender.com/createTag";
+//   const response = await fetch(api, {
+//     method: "POST",
+//     headers: {
+//       Authorization: `Bearer ${3333333333}`,
+//       "Content-Type": "application/json",
+//     },
+//     body: {},
+//   });
+// }
+
+
 
 async function fetchData(url) {
   try {
@@ -19,10 +30,13 @@ async function fetchData(url) {
     });
 
     if (response.status === 200) {
-      const textformat = await response.json();
+      
+      const data = await response.json();
       const container = document.getElementById("buttons");
+      const tagContainer = document.getElementById("tag");
 
-      textformat.filter((value) => {
+
+      data.buttons.filter((value) => {
         const buttonElement = document.createElement("button");
         buttonElement.textContent = value.label;
         buttonElement.style.backgroundColor = value.style.color;
@@ -47,14 +61,18 @@ async function fetchData(url) {
             );
 
             if (action.status === 200) {
-              const {message} =await action.json()
-              alert(message)
+              const data = await action.json();
+               alert(data.message);
             }
           } catch (error) {
             console.log();
           }
         });
         container.appendChild(buttonElement);
+        tagContainer.style.backgroundColor = "rgb(240, 240, 240)"
+        tagContainer.style.width = "50%"
+        tagContainer.style.height = "200px"
+        tagContainer.style.margin = "auto"
       });
     } else {
       alert(response.statusText);

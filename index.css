@@ -64,3 +64,10 @@
   cursor: pointer;
 }
 
+form{
+  display: grid;
+  width:20%;
+}
+
+
+
