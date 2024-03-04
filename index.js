@@ -16,7 +16,6 @@ async function fetchData(url) {
       const data = await response.json();
       const container = document.getElementById("buttons");
       const tagContainer = document.getElementById("tag");
-      
 
       data.buttons.filter((value) => {
         const buttonElement = document.createElement("button");
@@ -56,7 +55,8 @@ async function fetchData(url) {
               tag.style.margin = "10px";
 
               tagContainer.appendChild(tag);
-              console.log(data.message);
+            } else {
+              alert(data.message);
             }
           } catch (error) {
             console.log(error);
