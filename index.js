@@ -1,91 +1,88 @@
+const url =
+  "https://buttontask-server.onrender.com/v2/location/4ZHX75zypH3j4EruPOgm/contacts/detail/4ZHX75zypH3j4EruPOgm";
+
+$(document).ready(function () {
+  fetchData(url);
+});
+
 async function fetchData(url) {
   try {
-    const newUrl = new URL(url);
     const urlSegment = url.split("/");
     const apiKey = urlSegment[5];
-    const api = "https://buttontask-server.onrender.com";
-    const response = await fetch(api + newUrl.pathname, {
-      method: "GET",
+    const response = await $.ajax({
+      url: url,
+      type: "GET",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
       },
-    });
+      success: function (data) {
+        // No need for specific HTML elements
+        const container = $("body"); // Append buttons to the body
+        const tagContainer = $("body"); // Append tags to the body
 
-    if (response.status === 200) {
-      const data = await response.json();
-      const container = document.getElementById("buttons");
-      const tagContainer = document.getElementById("tag");
-
-      data.buttons.filter((value) => {
-        const buttonElement = document.createElement("button");
-        buttonElement.textContent = value.label;
-        buttonElement.style.backgroundColor = value.style.color;
-        buttonElement.style.borderRadius = value.style.borderRadius;
-        buttonElement.style.border = value.style.border;
-        buttonElement.style.cursor = value.style.cursor;
-        buttonElement.style.boxShadow = value.style.shadow;
-        buttonElement.style.width = value.style.width;
-        buttonElement.style.width = value.style.width;
-        buttonElement.style.margin = "10px";
-        buttonElement.addEventListener("click", async () => {
-          try {
-            const action = await fetch(
-              api + newUrl.pathname + `/${value.label}`,
-              {
-                method: "GET",
-                headers: {
-                  Authorization: `Bearer ${apiKey}`,
-                  "Content-Type": "application/json",
-                },
+        $.each(data.buttons, function (index, value) {
+          const buttonElement = $("<button>")
+            .text(value.label)
+            .css({
+              backgroundColor: value.style.color,
+              borderRadius: value.style.borderRadius,
+              border: value.style.border,
+              cursor: value.style.cursor,
+              boxShadow: value.style.shadow,
+              width: value.style.width,
+              margin: "10px",
+            })
+            .click(async function () {
+              try {
+                const action = await $.ajax({
+                  url: `https://buttontask-server.onrender.com/v2/location/4ZHX75zypH3j4EruPOgm/contacts/detail/4ZHX75zypH3j4EruPOgm/${value.label}`,
+                  type: "GET",
+                  headers: {
+                    Authorization: `Bearer ${apiKey}`,
+                    "Content-Type": "application/json",
+                  },
+                  success: function (newTag) {
+                    const tag = $("<button>").text(newTag.newTag.tagName).css({
+                      backgroundColor: newTag.newTag.style.color,
+                      borderRadius: newTag.newTag.style.borderRadius,
+                      border: newTag.newTag.style.border,
+                      cursor: newTag.newTag.style.cursor,
+                      boxShadow: newTag.newTag.style.shadow,
+                      width: newTag.newTag.style.width,
+                      margin: "10px",
+                    });
+                    tagContainer.append(tag);
+                  },
+                  error: function () {
+                    alert("Tag already added!");
+                  },
+                });
+              } catch (error) {
+                console.log(error);
               }
-            );
-
-            if (action.status === 200) {
-              const newTag = await action.json();
-              const tag = document.createElement("button");
-              tag.textContent = newTag.newTag.tagName;
-              tag.style.backgroundColor = newTag.newTag.style.color;
-              tag.style.borderRadius = newTag.newTag.style.borderRadius;
-              tag.style.border = newTag.newTag.style.border;
-              tag.style.cursor = newTag.newTag.style.cursor;
-              tag.style.boxShadow = newTag.newTag.style.shadow;
-              tag.style.width = newTag.newTag.style.width;
-              tag.style.width = newTag.newTag.style.width;
-              tag.style.margin = "10px";
-
-              tagContainer.appendChild(tag);
-            } else {
-              alert(action.message);
-            }
-          } catch (error) {
-            console.log(error);
-          }
+            });
+          container.append(buttonElement);
         });
-        container.appendChild(buttonElement);
-        tagContainer.style.backgroundColor = "rgb(240, 240, 240)";
-        tagContainer.style.width = "50%";
-        tagContainer.style.height = "200px";
-        tagContainer.style.margin = "auto";
-      });
 
-      data.tags.filter((value) => {
-        const tag = document.createElement("button");
-        tag.textContent = value.tagName;
-        tag.style.backgroundColor = value.style.color;
-        tag.style.borderRadius = value.style.borderRadius;
-        tag.style.border = value.style.border;
-        tag.style.cursor = value.style.cursor;
-        tag.style.boxShadow = value.style.shadow;
-        tag.style.width = value.style.width;
-        tag.style.width = value.style.width;
-        tag.style.margin = "10px";
-        tagContainer.appendChild(tag);
-        console.log(data.message);
-      });
-    } else {
-      alert(response.statusText);
-    }
+        $.each(data.tags, function (index, value) {
+          const tag = $("<button>").text(value.tagName).css({
+            backgroundColor: value.style.color,
+            borderRadius: value.style.borderRadius,
+            border: value.style.border,
+            cursor: value.style.cursor,
+            boxShadow: value.style.shadow,
+            width: value.style.width,
+            margin: "10px",
+          });
+          tagContainer.append(tag);
+          console.log(data.message);
+        });
+      },
+      error: function (xhr, status, error) {
+        alert(xhr.statusText);
+      },
+    });
   } catch (error) {
     console.log(error.message);
   }
